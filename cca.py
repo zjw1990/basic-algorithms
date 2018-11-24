@@ -1,6 +1,6 @@
 import numpy as np 
 from scipy import linalg
-from prepair_data import mean_center
+
 #QR solution of CCA, same as the solution of matlab
 def CCA(x,y, dim = 0):
     shapex = np.shape(x)
@@ -49,26 +49,8 @@ def repermuation(x,permutaion):
         A[permutaion[i]] = x[i]
     return A
 
-# SVD solution of CCA   
-def CCA_SVD_Solution(x,y, dim = 0):
+def mean_center(x):
     x = np.array(x)
-    y = np.array(y)
-    shapex = np.shape(x)
-    shapey = np.shape(y)
-    p1 = shapex[1]
-    p2 = shapey[1]
-
-    u_x,s_x,v_t_x = linalg.svd(x)
-    v_x = v_t_x.T
-
-    u_y,s_y,v_t_y = linalg.svd(y)
-    v_y = v_t_y.T
-
-    U,S,V_T = linalg.svd(u_x.T.dot(u_y))
-    V = V_T.T
-   
-    A = v_x.dot(linalg.pinv(s_x)).dot(U)
-    B = v_y.dot(linalg.pinv(s_y)).dot(V)
-
-
-    return A,B,S
+    avg = np.mean(x, axis=0)
+    x -= avg
+    return x
